@@ -13,35 +13,71 @@ import com.amanpreet.springrest.entity.Employee;
 
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
+
+	// define field for Entity Manager
 	private EntityManager entityManager;
-	
+
+	// set up constructor injection
 	@Autowired
 	public EmployeeDaoImpl(EntityManager theEntityManager) {
 		entityManager = theEntityManager;
 	}
+
 	@Override
 	public List<Employee> findAll() {
+
+		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query<Employee> query = currentSession.createQuery("fromEmployee", Employee.class);
-		List<Employee> employee = query.getResultList();
-		return null;
+
+		// create a query
+		Query<Employee> theQuery = currentSession.createQuery("from Employee", Employee.class); // HQL
+
+		// execute query and get the result list
+		List<Employee> employees = theQuery.getResultList();
+
+		// return the result list
+
+		return employees;
 	}
+
 	@Override
-	public Employee findById(int id) {
+	public Employee findById(int theId) {
+
+		// get the current hibernate session
+
 		Session currentSession = entityManager.unwrap(Session.class);
-		Employee employee = currentSession.get(Employee.class, id);
-		return employee;
+
+		// get the employee
+		Employee theEmployee = currentSession.get(Employee.class, theId);
+
+		// return the employee
+		return theEmployee;
 	}
+
 	@Override
-	public void insert(Employee employee) {
+	public void save(Employee theEmployee) {
+		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
-		currentSession.save(employee);
+
+		// save employee
+		currentSession.saveOrUpdate(theEmployee);
+		// if a particular id is not present it will save it, if that id is present it
+		// will update it.
+
 	}
+
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(int theId) {
+		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query query = currentSession.createQuery("delete from employee where id = :employeeid");
-		query.setParameter("employeeid",id);
-		query.executeUpdate();
+
+		// delete the object with primary key
+		Query theQuery = currentSession.createQuery("delete from Employee where id = :employeeId");
+
+		theQuery.setParameter("employeeId", theId);
+
+		theQuery.executeUpdate();
+
 	}
+
 }

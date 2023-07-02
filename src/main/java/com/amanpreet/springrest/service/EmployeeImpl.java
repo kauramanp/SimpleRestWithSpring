@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.amanpreet.springrest.dao.EmployeeDao;
 import com.amanpreet.springrest.entity.Employee;
+import javax.transaction.Transactional;
 
 
 @Service
@@ -20,6 +21,7 @@ public class EmployeeImpl implements EmployeeService{
 	}
 
 	@Override
+	@Transactional
 	public List<Employee> findAll() {
 		return employeeDao.findAll();
 	}
@@ -31,7 +33,7 @@ public class EmployeeImpl implements EmployeeService{
 
 	@Override
 	public void insert(Employee employee) {
-		employeeDao.insert(employee);
+		employeeDao.save(employee);
 		
 	}
 
